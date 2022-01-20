@@ -1,0 +1,90 @@
+ROCK(1)                                                   ROCK(1)
+
+
+
+NNAAMMEE
+       rock, rockd - run a program over reliable sockets
+
+SSYYNNOOPPSSIISS
+       rroocckk [ --kk ] [ --ll ] [ --dd [ uusseerr ] ] _c_o_m_m_a_n_d [ _a_r_g _._._.  ]
+
+DDEESSCCRRIIPPTTIIOONN
+       Rock  runs  the  specified  command  over reliable sockets
+       (rocks), protecting from failure the  network  connections
+       created by the command process and its children.  Recover-
+       able failures include those  caused  by  host  IP  address
+       change,  extended  periods  of  network disconnection, and
+       link failure.
+
+       Rocks must be enabled at  both  ends  of  the  connection.
+       Rock  by default assumes that the command process communi-
+       cates with rock-enabled remote  peers.   Connections  with
+       ordinary  peers, those that do not support rocks, silently
+       revert to ordinary socket behavior.
+
+       The --dd option enables reliable socket connections to ordi-
+       nary  peers  by  redirecting  the connection through a new
+       rockd process, started by rock, on the remote host.  Rockd
+       must  be  in  the path of the remote user, either $$UUSSEERR or
+       uusseerr.  Use of this option is currently limited to the com-
+       mands ssh and scp.
+
+       The  --kk  option  also loads the ckpt checkpoint library in
+       the process.
+
+       The --ll option  forces  suspended  rocks  to  reconnect  to
+       localhost.   This is useful for process migration of a set
+       of processes communicating over rocks.
+
+       Failed connections that cannot be recovered by rocks after
+       72 hours are silently closed.
+
+EEXXAAMMPPLLEESS
+       Start a rocks-enabled sshd on host nob:
+
+              nob# rock sshd
+
+       Start  a  new  rocks-enabled shell, then ssh over rocks to
+       nob:
+
+              % rock sh
+              % ssh nob
+
+       Start a rocks-enabled remote shell on a host  ("oldskool")
+       that does not have a rocks-enabled sshd:
+
+              % rock -d ssh oldskool
+
+FFIILLEESS
+       lliibbrroocckkss..ssoo
+              Dynamic library loaded into the command process and
+              its children.  It must be  in  the  LLDD__LLIIBBRRAARRYY__PPAATTHH
+              (see   _l_d_._s_o(8))   of   the   command   or  in  the
+              IINNSSTTAALLLL__LLIIBB__DDIIRR set when rock was compiled.
+
+SSOOUURRCCEE
+       See hhttttpp::////wwwwww..ccss..wwiisscc..eedduu//~~zzaannddyy//rroocckkss.
+
+SSEEEE AALLSSOO
+       Rock loads code into the command process using LLDD__PPRREELLOOAADD,
+       which has its own limitations; see _l_d_._s_o(8).
+
+       The    ckpt    checkpoint    library   is   available   at
+       hhttttpp::////wwwwww..ccss..wwiisscc..eedduu//~~zzaannddyy//cckkpptt.
+
+       Victor C. Zandy and Barton P.  Miller.  "Reliable  Network
+       Connections".  ACM MobiCom'02, Atlanta, GA, 2002.
+
+BBUUGGSS
+       Currently rocks only protect TCP connections.
+
+       Rocks are not firewall friendly.
+
+       Connection recovery does not succeed when both ends change
+       IP address while disconnected (but note the --ll option)
+
+       Rockd requires you to type your password twice.
+
+
+
+                                                          ROCK(1)

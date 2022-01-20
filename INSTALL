@@ -1,0 +1,40 @@
+Rocks: Reliable Sockets v2.4
+Installation Guide
+
+Reliable sockets currently run on x86 Linux 2.4.
+
+		   Quick (No Configuration) Install
+
+To build and install reliable sockets:
+
+    % make install
+
+The binaries (rock and rockd) will be installed in $HOME/bin.
+The library (librocks.so) will be installed in $HOME/lib.
+If you want to install them elsewhere, see below.
+The manual page (rock.1) will not be installed anywhere.
+
+`make install' requires OpenSSL (we use version 0.9.6).  openssl is
+standard in many Linux distributions.  See below for other options.
+
+The OpenSSL homepage is www.openssl.org.
+
+			    Configuration
+
+These configuration variables, defined in make.config, are for users.
+
+INSTALL_BIN_DIR
+    The directory in which to install the rocks binaries (rock and rockd).
+
+INSTALL_LIBRARY_DIR
+    The directory in which to install the rocks library (librocks.so).
+
+USE_CRYPTO
+    If this variable is defined (to ANY value), then authentication is
+    enabled.
+
+OPENSSL_INCLUDE_DIR
+OPENSSL_LIBRARY_DIR
+    USE_CRYPTO requires various bits of cryptography code.
+    Currently we get them from the OpenSSL library.  Set the
+    path to the OpenSSL headers and library with these variables.

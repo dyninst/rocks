@@ -1,0 +1,110 @@
+.TH ROCK 1
+.SH NAME
+rock, rockd \- run a program over reliable sockets
+.SH SYNOPSIS
+.B rock
+[
+.B -k
+]
+[
+.B -l
+]
+[
+.B -d
+[
+.B user
+]
+]
+.I command
+[
+.I arg ...
+]
+.SH DESCRIPTION
+Rock runs the specified command over reliable sockets (rocks),
+protecting from failure the network connections created by the command
+process and its children.  Recoverable failures include those caused
+by host IP address change, extended periods of network disconnection,
+and link failure.
+.PP
+Rocks must be enabled at both ends of the connection.  Rock by default
+assumes that the command process communicates with rock-enabled remote
+peers.  Connections with ordinary peers, those that do not support
+rocks, silently revert to ordinary socket behavior.
+.PP
+The
+.B -d 
+option enables reliable socket connections to ordinary peers by
+redirecting the connection through a new rockd process, started by
+rock, on the remote host.  Rockd must be in the path of the remote
+user, either
+.B $USER
+or
+.BR user .
+Use of this option is currently limited to the commands ssh and
+scp.
+.PP
+The
+.B -k
+option also loads the ckpt checkpoint library in the process.
+.PP
+The
+.B -l
+option forces suspended rocks to reconnect to
+localhost.  This is useful for process migration of a
+set of processes communicating over rocks.
+.PP
+Failed connections that cannot be recovered by rocks after 72 hours
+are silently closed.
+.SH EXAMPLES
+Start a rocks-enabled sshd on host nob:
+.IP
+nob# rock sshd
+.PP
+Start a new rocks-enabled shell, then ssh over rocks to nob:
+.PP
+.RS
+% rock sh 
+.br
+% ssh nob
+.RE
+.PP
+Start a rocks-enabled remote shell on a host ("oldskool") that does
+not have a rocks-enabled sshd:
+.IP
+% rock -d ssh oldskool
+.SH FILES
+.TP
+.B librocks.so
+Dynamic library loaded into the command process and its children.  It
+must be in the
+.B LD_LIBRARY_PATH
+(see 
+.IR ld.so (8))
+of the command or in the 
+.B INSTALL_LIB_DIR
+set when rock was compiled.
+.SH SOURCE
+See
+.BR http://www.cs.wisc.edu/~zandy/rocks .
+.SH SEE ALSO
+Rock loads code into the command process using
+.BR LD_PRELOAD ,
+which has its own limitations; see 
+.IR ld.so (8).
+.PP
+The ckpt checkpoint library is available at
+.BR http://www.cs.wisc.edu/~zandy/ckpt .
+.PP
+Victor C. Zandy and Barton P. Miller. "Reliable Network
+Connections".  ACM MobiCom'02, Atlanta, GA, 2002.
+.SH BUGS
+Currently rocks only protect TCP connections.
+.PP 
+Rocks are not firewall friendly.
+.PP
+Connection recovery does not succeed when both ends change IP address
+while disconnected (but note the 
+.B -l
+option)
+.PP
+Rockd requires you to type your password twice.

@@ -1,0 +1,58 @@
+Rocks: Reliable Sockets
+Version History
+
+* Version 2.4
+
+Bug fixes.
+
+* Version 2.3 was not released
+
+The heartbeat is now based on UDP.
+
+A rock closed by the peer is not interpreted as
+disconnection, even when the local end does not observe
+the close.
+
+The P4 device of MPICH is now supported, when
+enhancement detection is disabled. 
+
+Applications have more freedom to control the signal
+disposition.  Applications still may not depend on
+SIGALRM.
+
+Support for readv and writev system calls.
+
+* Version 2.2 was not released
+
+The interoperability protocol has been changed.  The
+new version, called the enhancement detection protocol
+(edp), does not require server state and is more
+firewall friendly.
+
+Rocks are closed when a process exits.
+
+Several fixes to the 1of2 algorithm.
+
+Cleaner log messages.
+
+* Version 2.1 was released December 10, 2001.
+
+Bug fixes.
+
+* Version 2.0 was released November 4, 2001.
+
+Rock-enabled processes may now call fork or exec.
+
+Reconnection now happens asynchronously in a separate process,
+allowing programs to run with suspended connections.
+
+Many bug fixes.
+
+* Version 1.0 was released on May 21, 2001
+
+Rock detection.
+Many bug fixes.
+
+* Version 0.90 was released on March 11, 2001
+
+First release of reliable sockets.
